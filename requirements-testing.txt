@@ -1,8 +1,8 @@
 bcrypt <= 3.2.2
 beautifulsoup4 <= 4.11.1
-black <= 22.8.0
-cryptography <= 36.0.0
-eventlet <= 0.33.2
+black <= 24.10.0
+cryptography <= 43.0.3
+eventlet <= 0.37.0
 fedmsg <= 1.1.2
 flake8
 
