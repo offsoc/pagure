@@ -8,26 +8,26 @@ bleach <= 5.0.1
 blinker <= 1.5
 celery
 chardet <= 4.0.0
-cryptography <= 36.0.0
+cryptography <= 43.0.3
 docutils <= 0.17.1
 
 # required for backward compatibility
 email_validator
 
-flask <= 2.2.2
-werkzeug < 3.0.0
+flask <= 3.0.3
+werkzeug < 4.0.0
 flask-wtf <= 1.0.0
 kitchen == 1.2.6
 markdown
 munch <= 2.5.0
-Pillow <= 9.2.0
+Pillow <= 11.0.0
 psutil <= 5.9.2
 pygit2 < 1.15.0
 python3-openid <= 3.2.0
 python-openid-cla == 1.2
 python-openid-teams == 1.1
 redis
-requests <= 2.28.1
+requests <= 2.32.3
 six <= 1.16.0
 
 # required for backward compatibility
