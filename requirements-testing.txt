@@ -1,6 +1,6 @@
 beautifulsoup4 <= 4.12.3
 black <= 24.4.2
-eventlet <= 0.40.0
+eventlet <= 0.40.3
 fedmsg <= 1.1.2
 flake8 <= 6.0.0
 
