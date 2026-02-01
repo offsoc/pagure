@@ -141,9 +141,11 @@ def send_action_notification(
     msg = dict(
         authors=[author],
         agent=user,
-        repo=project.to_json(public=True)
-        if not isinstance(project, six.string_types)
-        else project,
+        repo=(
+            project.to_json(public=True)
+            if not isinstance(project, six.string_types)
+            else project
+        ),
     )
     if subject == "branch":
         msg["branch"] = refname
@@ -189,13 +191,14 @@ def send_notifications(
         authors.append(author)
 
     if revs:
+        revs.reverse()
+
         changed_files = pagure.lib.git.get_changed_files(
             revs[-1],
             oldrev,
             repodir,
         )
 
-        revs.reverse()
         print("* Publishing information for %i commits" % len(revs))
 
         topic = "git.receive"
@@ -209,9 +212,11 @@ def send_notifications(
             authors=list(authors),
             changed_files=changed_files,
             agent=user,
-            repo=project.to_json(public=True)
-            if not isinstance(project, six.string_types)
-            else project,
+            repo=(
+                project.to_json(public=True)
+                if not isinstance(project, six.string_types)
+                else project
+            ),
             pull_request_id=pr_id,
         )
 

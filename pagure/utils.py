@@ -19,6 +19,7 @@ import re
 from functools import wraps
 
 import flask
+import markupsafe
 import pygit2
 import six
 import werkzeug.utils
@@ -385,7 +386,7 @@ def login_required(function):
         elif auth_method == "fas" and not flask.g.fas_user.cla_done:
             flask.session["_requires_fpca"] = True
             flask.flash(
-                flask.Markup(
+                markupsafe.Markup(
                     'You must <a href="https://accounts.fedoraproject'
                     '.org/">sign the FPCA</a> (Fedora Project '
                     "Contributor Agreement) to use pagure"
@@ -428,7 +429,7 @@ def __get_file_in_tree(repo_obj, tree, filepath, bail_on_tree=False):
                 ):
                     try:
                         dereferenced = tree[content]
-                    except KeyError:
+                    except (KeyError, TypeError):
                         pass
                     else:
                         if dereferenced.filemode == pygit2.GIT_FILEMODE_BLOB:

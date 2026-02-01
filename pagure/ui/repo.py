@@ -28,6 +28,7 @@ from math import ceil
 
 import flask
 import kitchen.text.converters as ktc
+import markupsafe
 import pygit2
 import six
 import werkzeug.utils
@@ -2343,9 +2344,11 @@ def add_token(repo, username=None, namespace=None):
             pagure.lib.query.add_token_to_user(
                 flask.g.session,
                 repo,
-                description=form.description.data.strip()
-                if form.description.data
-                else None,
+                description=(
+                    form.description.data.strip()
+                    if form.description.data
+                    else None
+                ),
                 acls=form.acls.data,
                 username=flask.g.fas_user.username,
                 expiration_date=form.expiration_date.data,
@@ -2487,7 +2490,7 @@ def revoke_api_token(repo, token_id, username=None, namespace=None):
         except SQLAlchemyError as err:  # pragma: no cover
             flask.g.session.rollback()
             _log.exception(err)
-            message = flask.Markup(
+            message = markupsafe.Markup(
                 "Token could not be revoked,"
                 ' please <a href="/about">contact an administrator</a>'
             )

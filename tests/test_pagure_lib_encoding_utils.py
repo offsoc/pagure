@@ -40,7 +40,7 @@ class TestGuessEncoding(unittest.TestCase):
         """
         Test that strings that could be UTF-8 or ISO-8859-* result in UTF-8.
 
-        python-chardet-3.0.4-2.fc27.noarch detects it as ISO-8859-9
+        python-chardet-3.0.4-2.fc27.noarch and above detects it as ISO-8859-9
         python-chardet-2.2.1-1.el7_1.noarch detects it as ISO-8859-2
         """
         data = "Šabata".encode("utf-8")
@@ -50,7 +50,7 @@ class TestGuessEncoding(unittest.TestCase):
             self.assertEqual(result, "WINDOWS-1250")
         else:
             self.assertEqual(result, "utf-8")
-            if chardet.__version__[0] in ("3", "4"):
+            if chardet.__version__[0] in ("3", "4", "5"):
                 self.assertEqual(chardet_result["encoding"], "ISO-8859-9")
             else:
                 self.assertEqual(chardet_result["encoding"], "ISO-8859-2")
@@ -75,7 +75,11 @@ class TestGuessEncodings(unittest.TestCase):
                 # The first three have different confidence values
                 expexted_list = ["utf-8", "ISO-8859-9", "ISO-8859-1"]
                 # This is the one with the least confidence
-                self.assertEqual(result[-1].encoding, "windows-1255")
+                print(result)
+                if chardet.__version__ >= "5.1.0":
+                    self.assertEqual(result[-1].encoding, "TIS-620")
+                else:
+                    self.assertEqual(result[-1].encoding, "windows-1255")
                 self.assertListEqual(
                     [encoding.encoding for encoding in result][:3],
                     expexted_list,
@@ -83,30 +87,58 @@ class TestGuessEncodings(unittest.TestCase):
 
                 # The values in the middle of the list all have the same confidence
                 # value and can't be sorted reliably: use sets.
-                expected_list = sorted(
-                    [
-                        "utf-8",
-                        "ISO-8859-9",
-                        "ISO-8859-1",
-                        "MacCyrillic",
-                        "IBM866",
-                        "TIS-620",
-                        "EUC-JP",
-                        "EUC-KR",
-                        "GB2312",
-                        "KOI8-R",
-                        "Big5",
-                        "IBM855",
-                        "ISO-8859-7",
-                        "SHIFT_JIS",
-                        "windows-1253",
-                        "CP949",
-                        "EUC-TW",
-                        "ISO-8859-5",
-                        "windows-1251",
-                        "windows-1255",
-                    ]
-                )
+                if chardet.__version__ >= "5.1.0":
+                    expected_list = sorted(
+                        [
+                            "utf-8",
+                            "ISO-8859-9",
+                            "ISO-8859-1",
+                            "MacCyrillic",
+                            "IBM866",
+                            "TIS-620",
+                            "EUC-JP",
+                            "EUC-KR",
+                            "GB2312",
+                            "KOI8-R",
+                            "Big5",
+                            "IBM855",
+                            "ISO-8859-7",
+                            "SHIFT_JIS",
+                            "windows-1253",
+                            "CP949",
+                            "EUC-TW",
+                            "ISO-8859-5",
+                            "windows-1251",
+                            "windows-1255",
+                            "Johab",  # Added in 5.0.0
+                            "MacRoman",  # Added in 5.1.0
+                        ]
+                    )
+                else:
+                    expected_list = sorted(
+                        [
+                            "utf-8",
+                            "ISO-8859-9",
+                            "ISO-8859-1",
+                            "MacCyrillic",
+                            "IBM866",
+                            "TIS-620",
+                            "EUC-JP",
+                            "EUC-KR",
+                            "GB2312",
+                            "KOI8-R",
+                            "Big5",
+                            "IBM855",
+                            "ISO-8859-7",
+                            "SHIFT_JIS",
+                            "windows-1253",
+                            "CP949",
+                            "EUC-TW",
+                            "ISO-8859-5",
+                            "windows-1251",
+                            "windows-1255",
+                        ]
+                    )
                 self.assertListEqual(
                     sorted(set([encoding.encoding for encoding in result])),
                     expected_list,

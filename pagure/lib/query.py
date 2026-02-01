@@ -4370,37 +4370,40 @@ def clean_input(text, ignore=None):
         else:
             attrs["img"] = filter_img_src
 
-    tags = bleach.ALLOWED_TAGS + [
-        "p",
-        "br",
-        "div",
-        "h1",
-        "h2",
-        "h3",
-        "h4",
-        "h5",
-        "h6",
-        "table",
-        "td",
-        "tr",
-        "th",
-        "thead",
-        "tbody",
-        "col",
-        "pre",
-        "img",
-        "hr",
-        "dl",
-        "dt",
-        "dd",
-        "span",
-        "kbd",
-        "var",
-        "del",
-        "cite",
-        "noscript",
-        "colgroup",
-    ]
+    tags = list(bleach.ALLOWED_TAGS)
+    tags.extend(
+        [
+            "p",
+            "br",
+            "div",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "table",
+            "td",
+            "tr",
+            "th",
+            "thead",
+            "tbody",
+            "col",
+            "pre",
+            "img",
+            "hr",
+            "dl",
+            "dt",
+            "dd",
+            "span",
+            "kbd",
+            "var",
+            "del",
+            "cite",
+            "noscript",
+            "colgroup",
+        ]
+    )
     if ignore:
         for tag in ignore:
             if tag in tags:
@@ -4410,7 +4413,10 @@ def clean_input(text, ignore=None):
 
     # newer bleach allow to customize the protocol supported
     if tuple(bleach_v) >= (1, 5, 0):  # pragma: no cover
-        protocols = bleach.ALLOWED_PROTOCOLS + ["irc", "ircs"]
+        protocols = list(bleach.ALLOWED_PROTOCOLS)
+        protocols.extend(["irc", "ircs"])
+        print(type(protocols))
+        print(protocols)
         kwargs["protocols"] = protocols
 
     return bleach.clean(text, **kwargs)
